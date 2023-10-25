@@ -40,7 +40,7 @@ public class NotificationControllerTests {
         String memberId = "ascacasc-assdasd-asdasd";
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/notifications/subscribe")
+                .get("/notifications/subscription")
                 .header("memberId", memberId);
 
         mockMvc.perform(requestBuilder).andExpect(status().isCreated());

@@ -35,7 +35,7 @@ public class NotificationController {
     }
 
     // TODO : Last-Event-ID
-    @GetMapping(value = "/subscribe", produces = "text/event-stream")
+    @GetMapping(value = "/subscription", produces = "text/event-stream")
     @ResponseStatus(HttpStatus.CREATED)
     public SseEmitter subscribeNotification(@RequestHeader String memberId) {
         return sseService.subscribe(memberId);
