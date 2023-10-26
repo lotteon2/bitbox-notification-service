@@ -33,7 +33,7 @@ public class SseService {
         sseEmitter.onTimeout(() -> emitterRepository.deleteByEmitterId(emitterId));
 
         String eventId = makeTimeIncludeId(memberId);
-        sendNotification(sseEmitter, eventId, CONNECT_EVENT, emitterId, WELCOME_MESSAGE);
+        sendNotification(sseEmitter, CONNECT_EVENT, eventId, emitterId, WELCOME_MESSAGE);
 
         return sseEmitter;
     }
