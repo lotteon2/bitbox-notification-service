@@ -5,6 +5,7 @@ import com.bitbox.notification.service.NotificationService;
 import com.bitbox.notification.service.SseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -35,7 +36,7 @@ public class NotificationController {
     }
 
     // TODO : Last-Event-ID
-    @GetMapping(value = "/subscription", produces = "text/event-stream")
+    @GetMapping(value = "/subscription", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SseEmitter subscribeNotification(@RequestHeader String memberId) {
         return sseService.subscribe(memberId);

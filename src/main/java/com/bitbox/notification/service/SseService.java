@@ -21,11 +21,10 @@ public class SseService {
     private final EmitterRepository emitterRepository;
     private final NotificationRepository notificationRepository;
 
-    private final long TIME_OUT = 60L * 60L * 1000L;
-
-    private final String WELCOME_MESSAGE = "Hello, BITBOX";
-
     public SseEmitter subscribe(String memberId) {
+        final long TIME_OUT = 60L * 60L * 1000L;
+        final String WELCOME_MESSAGE = "Hello, BITBOX";
+        final String CONNECT_EVENT = "CONNECT";
         String emitterId = makeTimeIncludeId(memberId);
         SseEmitter sseEmitter = emitterRepository.save(emitterId, new SseEmitter(TIME_OUT));
 
@@ -34,7 +33,7 @@ public class SseService {
         sseEmitter.onTimeout(() -> emitterRepository.deleteByEmitterId(emitterId));
 
         String eventId = makeTimeIncludeId(memberId);
-        sendNotification(sseEmitter, eventId, emitterId, WELCOME_MESSAGE);
+        sendNotification(sseEmitter, eventId, CONNECT_EVENT, emitterId, WELCOME_MESSAGE);
 
         return sseEmitter;
     }
@@ -43,9 +42,9 @@ public class SseService {
         return memberId + "_" + System.currentTimeMillis();
     }
 
-    private void sendNotification(SseEmitter sseEmitter, String eventId, String emitterId, Object notificationInfo) {
+    private void sendNotification(SseEmitter sseEmitter, String notificationType, String eventId, String emitterId, Object notificationInfo) {
         try {
-            sseEmitter.send(SseEmitter.event().id(eventId).data(notificationInfo));
+            sseEmitter.send(SseEmitter.event().name(notificationType).id(eventId).data(notificationInfo));
         } catch (IOException e) {
             emitterRepository.deleteByEmitterId(emitterId);
         }
@@ -61,6 +60,7 @@ public class SseService {
         emitterRepository.findAllEmitterStartWithMemberId(notificationDto.getReceiverId()).forEach(
                 (emitterId, sseEmitter) -> sendNotification(
                         sseEmitter,
+                        notificationDto.getNotificationType().name(),
                         makeTimeIncludeId(notificationDto.getReceiverId()),
                         emitterId,
                         notificationTuple.getNotificationInfo()
