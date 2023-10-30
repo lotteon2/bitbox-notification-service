@@ -119,6 +119,6 @@ public class NotificationRepositoryTests {
 
         notificationRepository.checkNotificationsDeleted(testMember);
 
-        assert notificationRepository.getByMemberIdAndDeletedIsFalse(testMember).isEmpty();
+        assert notificationRepository.getByMemberIdAndDeletedIsFalseOrderByCreatedAtDesc(testMember).isEmpty();
     }
 }

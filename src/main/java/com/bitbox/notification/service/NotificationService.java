@@ -22,7 +22,7 @@ public class NotificationService {
     }
 
     public List<Notification> getAllNotifications(String memberId) {
-        return notificationRepository.getByMemberIdAndDeletedIsFalse(memberId);
+        return notificationRepository.getByMemberIdAndDeletedIsFalseOrderByCreatedAtDesc(memberId);
     }
 
     public Integer countUnreadNotifications(String memberId) {
