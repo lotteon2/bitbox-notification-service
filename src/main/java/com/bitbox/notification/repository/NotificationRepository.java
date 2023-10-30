@@ -1,17 +1,17 @@
 package com.bitbox.notification.repository;
 
 import com.bitbox.notification.entity.Notification;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface NotificationRepository extends CrudRepository<Notification, Long> {
+public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> getTop5ByMemberIdAndDeletedIsFalseOrderByCreatedAtDesc(String memberId);
-    List<Notification> getByMemberIdAndDeletedIsFalse(String memberId);
+    List<Notification> getByMemberIdAndDeletedIsFalseOrderByCreatedAtDesc(String memberId);
     Integer countByMemberIdAndReadIsFalseAndDeletedIsFalse(String memberId);
 
     /**
