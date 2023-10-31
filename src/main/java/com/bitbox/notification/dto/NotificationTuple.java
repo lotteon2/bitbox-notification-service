@@ -19,17 +19,17 @@ public class NotificationTuple {
         switch (notificationDto.getNotificationType()) { // TODO : url들 확인하고 환경 변수로 빼야할 듯?
             case COMMENT:
                 notificationInfo = notificationDto.getSenderNickname() + "님이 댓글을 달았습니다";
-                notificationLink = "http://localhost:3001/board-service/board/" + notificationDto.getBoardId();
+                notificationLink = "https://ephemeral-valkyrie-b2a791.netlify.app/board-service/board/" + notificationDto.getBoardId();
                 break;
 
             case ATTENDANCE:
                 notificationInfo = "출석 10분 전입니다.";
-                notificationLink = "http://localhost:3001/mypage";
+                notificationLink = "https://ephemeral-valkyrie-b2a791.netlify.app/mypage";
                 break;
 
             case SUBSCRIPTION:
                 notificationInfo = "정액권 마감 10분 전입니다.";
-                notificationLink = "http://localhost:3001/payment";
+                notificationLink = "https://ephemeral-valkyrie-b2a791.netlify.app/payment";
                 break;
         }
 
