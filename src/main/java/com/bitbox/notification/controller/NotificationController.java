@@ -4,12 +4,14 @@ import com.bitbox.notification.entity.Notification;
 import com.bitbox.notification.service.NotificationService;
 import com.bitbox.notification.service.SseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -27,18 +29,22 @@ public class NotificationController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Notification>> getAllNotifications(@RequestHeader String memberId) {
-        return ResponseEntity.ok(notificationService.getAllNotifications(memberId));
+        List<Notification> list = notificationService.getAllNotifications(memberId);
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/count")
     public ResponseEntity<Integer> getUnreadNotificationCount(@RequestHeader String memberId) {
-        return ResponseEntity.ok(notificationService.countUnreadNotifications(memberId));
+        Integer result = notificationService.countUnreadNotifications(memberId);
+        return ResponseEntity.ok(result);
     }
 
-    // TODO : Last-Event-ID
     @GetMapping(value = "/subscription", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public SseEmitter subscribeNotification(@RequestHeader String memberId) {
+    public SseEmitter subscribeNotification(@RequestHeader String memberId, HttpServletResponse response) {
+        response.addHeader("X-Accel-Buffering", "no");
+        response.addHeader(HttpHeaders.CONNECTION, "keep-alive");
+        response.addHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
         return sseService.subscribe(memberId);
     }
 
