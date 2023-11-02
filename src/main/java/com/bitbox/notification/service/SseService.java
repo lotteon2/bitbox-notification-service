@@ -45,7 +45,7 @@ public class SseService {
     private void sendNotification(SseEmitter sseEmitter, String notificationType, String eventId, String emitterId, Object notificationInfo) {
         try {
             sseEmitter.send(SseEmitter.event().name(notificationType).id(eventId).data(notificationInfo));
-        } catch (IOException e) {
+        } catch (Exception e) {
             emitterRepository.deleteByEmitterId(emitterId);
         }
     }
@@ -56,6 +56,14 @@ public class SseService {
         // NotificationType 따라 url과 info 달라짐.
         NotificationTuple notificationTuple = NotificationTuple.strategies(notificationDto);
 
+        // db에 알림 저장
+        notificationRepository.save(Notification.builder()
+                .memberId(notificationDto.getReceiverId())
+                .notificationLink(notificationTuple.getNotificationLink())
+                .notificationInfo(notificationTuple.getNotificationInfo())
+                .build()
+        );
+
         // 해당 사용자의 emitter들에 모두 send
         emitterRepository.findAllEmitterStartWithMemberId(notificationDto.getReceiverId()).forEach(
                 (emitterId, sseEmitter) -> sendNotification(
@@ -65,14 +73,6 @@ public class SseService {
                         emitterId,
                         notificationTuple.getNotificationInfo()
                 )
-        );
-
-        // db에 알림 저장
-        notificationRepository.save(Notification.builder()
-                .memberId(notificationDto.getReceiverId())
-                .notificationLink(notificationTuple.getNotificationLink())
-                .notificationInfo(notificationTuple.getNotificationInfo())
-                .build()
         );
     }
 }
