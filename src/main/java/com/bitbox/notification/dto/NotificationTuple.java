@@ -25,12 +25,12 @@ public class NotificationTuple {
 
             case ATTENDANCE:
                 notificationInfo = "출석 10분 전입니다.";
-                notificationLink = "https://ourbitbox.netlify.app/" + "/mypage";
+                notificationLink = "https://ourbitbox.netlify.app" + "/mypage";
                 break;
 
             case SUBSCRIPTION:
                 notificationInfo = "정액권 마감 10분 전입니다.";
-                notificationLink = "https://ourbitbox.netlify.app/" + "/payment";
+                notificationLink = "https://ourbitbox.netlify.app" + "/payment";
                 break;
         }
 
